@@ -1,0 +1,147 @@
+
+{% extends 'startpage/base.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<title>game</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+/* Style the header */
+.header {
+  background-color: #f1f1f1;
+  padding: 20px;
+  text-align: right;
+}
+
+/* Create three equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 33.33%;
+  padding: 15px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width:600px) {
+  .column {
+    width: 100%;
+  }
+}
+</style>
+<meta http-equiv="refresh" content="4">
+</head>
+<body>
+
+<div class="header">
+  {% for new in news %}
+    <p>
+      <a href="{% url 'newsnews' new.id %}" class="list-group-item list-group-item-action{% if new.important %} list-group-item-danger{% endif %}">
+        {{new.newnews}} : {{new.user}}
+      </a>
+    </p>
+  {% endfor %}
+  <p>
+  </p>
+</div>
+
+<div class="row">
+  <div class="column" align='center' style="background-color: orange ;">
+    {% for quotation in quotations %}
+  <p>
+    <ul>
+      <li>
+        <a href="{% url 'quotationforedit' quotation.id %}" class="list-group-item list-group-item-action{% if quotation.Qforbuy %} list-group-item-danger{% endif %}">
+        نام مارکت یا شرکت : {{ quotation.Qname }}<br>
+        قیمت اعلام شده : {{ quotation.Qcost }}<br>
+        میزان سهم موجود : {{ quotation.Qquota }}<br>
+        {{ quotation.user }}<br>
+      </a>
+        <!--<a class="btn btn-primary" href="{%url 'quotationforedit' quotation.id %}" role="button">خرید</a>-->
+      </li>
+    </ul>
+  </p>
+  {% endfor %}
+  </div>
+  <div class="column" align='center' style="background-color: orange ;">
+    <h5>💼کیف پول</h5>
+    <ul>
+      <li>
+      موجودی : {{ mojodi }}🤑
+      <br>
+      سهم مارکت : %{{ sahmM }}
+      <br>
+      سهم شرکت : %{{ sahmC }}
+      <br>
+      سهم خریداری شده دلار : {{sahm_khD}}
+      <br>
+      سهم خریداری شده یورو : {{sahm_khE}}
+      <br>
+      سهم خریداری شده پوند : {{sahm_khP}}
+      <br>
+      سهم خریداری شده سکه : {{sahm_khS}}
+      <br>
+      سهم خریداری شده طلا : {{sahm_khT}}
+    </li>
+  </ul>
+  </div>
+  <div class="column" align='center' style="background-color: orange ;">
+    <ul>
+    <p>
+        <li><h5>قیمت مارکت ها</h5>
+          {% for cost in costss %}
+            <form action="extra" method="POST">
+            <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="{{ cost.name }}" name="{{ cost.name }}">
+              <label class="custom-control-label" for="{{ cost.name }}"><div style="color: black;">
+                
+                  {% csrf_token %}
+                  {{ cost.name }} | {{ cost.cost }}
+                  <input type="submit" value="خرید" class="btn btn-sm btn-block" style="background-color: rgb(250, 92, 0);">
+                </div></label>
+          </div>
+          </form>
+          {% endfor %}
+        </li>
+          <li><h5>قیمت شرکت ها</h5>
+          {% for costC in costssC %}
+          <form action="extraC" method="POST">
+            <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="{{ costC.name }}" name="{{ costC.name }}">
+              <label class="custom-control-label" for="{{ costC.name }}"><div style="color: black;">
+                
+                  {% csrf_token %}
+                  {{ costC.name }} | {{ costC.cost }}
+                  <input type="submit" value="خرید" class="btn btn-sm btn-block" style="background-color: rgb(250, 92, 0);">
+                </div></label>
+          </div>
+          </form>
+          {% endfor %}
+        </li>
+    </p>
+  </ul>
+  </div>
+</div>
+
+</body>
+</html>
+
+
+{% endblock %}
